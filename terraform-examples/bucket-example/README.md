@@ -13,7 +13,7 @@ This terraform example shows how the bucket constraint works. The relevant files
 ```
 # Ensure terraform-validator is installed
 terraform plan -out tfplan.out
-terraform-validator validate tfplan.out --policy-path=../..
+terraform-validator validate tfplan.out --project PROJECT --policy-path=../..
 ```
 
 You should get some output like this:

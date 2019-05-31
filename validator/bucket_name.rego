@@ -16,6 +16,6 @@ deny[{
 	bucket := asset.resource.data
 	startswith(bucket.name, prefix) != true
 
-	message := sprintf("%v doesnt the correct prefix: %v", [asset.name, prefix])
+	message := sprintf("%v doesnt have the correct prefix: %v", [asset.name, prefix])
 	metadata := {"resource": asset.name}
 }
