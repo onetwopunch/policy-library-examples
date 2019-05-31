@@ -1,0 +1,11 @@
+apiVersion: constraints.gatekeeper.sh/v1alpha1
+kind: BucketNamingContstraint
+metadata:
+  name: bucket_name
+spec:
+  severity: high
+  match:
+    gcp:
+      target: ["project/*"]
+  parameters:
+    prefix: my-project-

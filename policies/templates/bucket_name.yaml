@@ -1,0 +1,44 @@
+apiVersion: templates.gatekeeper.sh/v1alpha1
+kind: ConstraintTemplate
+metadata:
+  name: gcp-bucket-name
+  annotations:
+    # Example of tying a template to a CIS benchmark
+    benchmark: CIS11_5.03
+spec:
+  crd:
+    spec:
+      names:
+        kind: BucketNamingContstraint
+        plural: bucketsname
+      validation:
+        openAPIV3Schema:
+          properties:
+            prefix:
+              type: string
+  targets:
+   validation.gcp.forsetisecurity.org:
+      rego: |
+           #INLINE("validator/bucket_name.rego")
+           package templates.gcp.BucketNamingContstraint
+           
+           import data.validator.gcp.lib as lib
+           
+           deny[{
+           	"msg": message,
+           	"details": metadata,
+           }] {
+           	constraint := input.constraint
+           	lib.get_constraint_params(constraint, params)
+           	asset := input.asset
+           	asset.asset_type == "storage.googleapis.com/Bucket"
+           
+           	# Assert that the project has a particular prefix
+           	prefix := params.prefix
+           	bucket := asset.resource.data
+           	startswith(bucket.name, prefix) != true
+           
+           	message := sprintf("%v doesnt the correct prefix: %v", [asset.name, prefix])
+           	metadata := {"resource": asset.name}
+           }
+           #ENDINLINE
