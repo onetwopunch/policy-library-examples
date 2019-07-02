@@ -1,0 +1,8 @@
+apiVersion: constraints.gatekeeper.sh/v1alpha1
+kind: GCPExternalIpAccessConstraint
+metadata:
+  name: forbid-external-ip
+spec:
+  severity: high
+  match:
+    target: ["organization/*"]
